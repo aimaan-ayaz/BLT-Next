@@ -256,7 +256,7 @@
           if (window.bltApp?.auth) {
             const result = await window.bltApp.auth.login(email, password);
             if (result.success) {
-              window.location.href = 'index.html';
+              window.location.href = '../index.html';
             } else {
               alert(result.error || 'Login failed');
             }
@@ -300,17 +300,14 @@
     window.validateLoginPassword = function(input) {
       const errorEl = document.getElementById('passwordError');
       
-      if (input.value && input.value.length < 1) {
+      if (!input.value) {
         input.classList.add('border-red-500');
         input.classList.remove('border-green-500', 'border-gray-200', 'dark:border-gray-600');
         if (errorEl) { errorEl.textContent = 'Password is required'; errorEl.classList.remove('hidden'); }
-      } else if (input.value) {
+      } else {
         input.classList.remove('border-red-500');
         input.classList.add('border-green-500');
-        if (errorEl) errorEl.classList.add('hidden');
-      } else {
-        input.classList.remove('border-red-500', 'border-green-500');
-        input.classList.add('border-gray-200', 'dark:border-gray-600');
+        input.classList.remove('border-gray-200', 'dark:border-gray-600');
         if (errorEl) errorEl.classList.add('hidden');
       }
     };
