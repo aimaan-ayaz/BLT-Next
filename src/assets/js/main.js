@@ -213,6 +213,7 @@ class AuthModule {
     async checkAuth() {
         const token = getAuthToken();
         if (!token) {
+            this.state.setUser(null);
             return false;
         }
 
@@ -225,8 +226,10 @@ class AuthModule {
         } catch (error) {
             // Token invalid, clear it
             clearAuthToken();
+            this.state.setUser(null);
         }
 
+        this.state.setUser(null);
         return false;
     }
 }
@@ -297,6 +300,48 @@ function setupEventHandlers() {
                 window.bltApp.state.emit('theme:changed', isDark ? 'dark' : 'light');
             }
         });
+    }
+
+    // Login page handlers (bound in external JS to avoid inline event attributes)
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        const loginEmail = loginForm.querySelector('#email');
+        const loginPassword = loginForm.querySelector('#password');
+        const loginPasswordToggle = loginForm.querySelector('#loginPasswordToggle');
+
+        if (loginEmail) {
+            loginEmail.addEventListener('input', () => {
+                if (typeof window.validateLoginEmail === 'function') {
+                    window.validateLoginEmail(loginEmail);
+                }
+            });
+            loginEmail.addEventListener('blur', () => {
+                if (typeof window.validateLoginEmail === 'function') {
+                    window.validateLoginEmail(loginEmail);
+                }
+            });
+        }
+
+        if (loginPassword) {
+            loginPassword.addEventListener('input', () => {
+                if (typeof window.validateLoginPassword === 'function') {
+                    window.validateLoginPassword(loginPassword);
+                }
+            });
+            loginPassword.addEventListener('blur', () => {
+                if (typeof window.validateLoginPassword === 'function') {
+                    window.validateLoginPassword(loginPassword);
+                }
+            });
+        }
+
+        if (loginPasswordToggle) {
+            loginPasswordToggle.addEventListener('click', () => {
+                if (typeof window.togglePassword === 'function') {
+                    window.togglePassword('password', loginPasswordToggle);
+                }
+            });
+        }
     }
 }
 

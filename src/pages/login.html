@@ -48,11 +48,11 @@
           <a href="login.html" class="px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-600 dark:border-red-400 rounded-md hover:bg-red-600 hover:text-white transition-colors">Login</a>
           <a href="signup.html" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors">Sign Up</a>
         </div>
-        <button class="md:hidden p-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" id="mobileMenuBtn" aria-label="Open menu">
+        <button class="md:hidden p-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
           <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
         </button>
       </nav>
-      <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-[#E5E5E5] dark:border-gray-800 dark:bg-gray-900">
+      <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-[#E5E5E5] dark:border-gray-800 dark:bg-gray-900" aria-hidden="true">
         <ul class="flex flex-col gap-1 pt-3 list-none m-0 p-0">
           <li><a href="../index.html" class="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 transition-colors">Home</a></li>
           <li><a href="report-bug.html" class="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-md hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-800 transition-colors">Report Bug</a></li>
@@ -92,8 +92,6 @@
                 id="email"
                 required 
                 placeholder="you@example.com"
-                oninput="validateLoginEmail(this)"
-                onblur="validateLoginEmail(this)"
                 class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
               />
             </div>
@@ -116,13 +114,11 @@
                 id="password"
                 required 
                 placeholder="••••••••"
-                oninput="validateLoginPassword(this)"
-                onblur="validateLoginPassword(this)"
                 class="w-full pl-10 pr-12 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
               />
               <button 
+                id="loginPasswordToggle"
                 type="button" 
-                onclick="togglePassword('password', this)"
                 aria-label="Show password"
                 aria-pressed="false"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -242,8 +238,15 @@
     })();
     
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
-        document.getElementById('mobileMenu').classList.toggle('hidden');
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenuBtn?.addEventListener('click', () => {
+        const isHidden = mobileMenu?.classList.toggle('hidden');
+        const isExpanded = !isHidden;
+        mobileMenuBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        if (mobileMenu) {
+          mobileMenu.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
+        }
       });
       
       const loginForm = document.getElementById('loginForm');
