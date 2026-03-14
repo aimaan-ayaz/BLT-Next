@@ -168,7 +168,7 @@ class AuthModule {
 
     async login(email, password, remember = false) {
         try {
-            const response = await this.api.post('/auth/login', { email, password });
+            const response = await this.api.post('/api/auth/login', { email, password });
 
             if (response.token) {
                 persistAuthToken(response.token, remember);
@@ -184,7 +184,7 @@ class AuthModule {
 
     async signup(userData) {
         try {
-            const response = await this.api.post('/auth/signup', userData);
+            const response = await this.api.post('/api/auth/signup', userData);
 
             if (response.token) {
                 persistAuthToken(response.token, true);
@@ -200,7 +200,7 @@ class AuthModule {
 
     async logout() {
         try {
-            await this.api.post('/auth/logout', {});
+            await this.api.post('/api/auth/logout', {});
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
@@ -218,7 +218,7 @@ class AuthModule {
         }
 
         try {
-            const response = await this.api.get('/auth/me');
+            const response = await this.api.get('/api/auth/me');
             if (response.user) {
                 this.state.setUser(response.user);
                 return true;
